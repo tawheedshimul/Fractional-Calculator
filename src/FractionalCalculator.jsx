@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 function FractionalCalculator() {
-    const [leftNumerator, setLeftNumerator] = useState('');
-    const [leftDenominator, setLeftDenominator] = useState('');
-    const [rightNumerator, setRightNumerator] = useState('');
-    const [rightDenominator, setRightDenominator] = useState('');
+    const [leftNumerator, setLeftNumerator] = useState(-3);
+    const [leftDenominator, setLeftDenominator] = useState(4);
+    const [rightNumerator, setRightNumerator] = useState(-5);
+    const [rightDenominator, setRightDenominator] = useState(8);
     const [operation, setOperation] = useState('+');
     const [result, setResult] = useState('');
     const [steps, setSteps] = useState([]);
@@ -66,9 +66,18 @@ function FractionalCalculator() {
 
             let stepsArray = [];
 
+
+            // Solution with steps
+            stepsArray.push(`(${num1}/${den1})${operation}(${num2}/${den2}) = ?`);
             // Add steps to the array
-            stepsArray.push(`Find the least common denominator (LCD):${num1}/${den1},${num2},${den2} = ${lcd}`);
-            stepsArray.push(`Convert both fractions to have a denominator of ${lcd}`);
+            stepsArray.push(`Find the least common denominator (LCD):${num1}/${den1},${num2}/${den2} = ${lcd}`);
+
+            stepsArray.push(`\t(${num1} * ${lcd / den1} / ${den1} * ${lcd / den1}) ${operation} (${num2} * ${lcd / den2} / ${den2} * ${lcd / den2}) = ?`)
+            stepsArray.push(`\t${num1 * (lcd / den1)} / ${lcd} ${operation} ${num2 * (lcd / den2)} / ${lcd} = ?`);
+            stepsArray.push(`\t(${num1 * (lcd / den1)} ${operation} ${num2 * (lcd / den2)} )/ ${lcd} = ?`);
+           
+
+
             stepsArray.push(`Calculate the result:`);
 
             switch (operation) {
@@ -98,49 +107,51 @@ function FractionalCalculator() {
     };
 
     return (
-        <div className='flex bg-red'>
-            <div>
-                <input
-                    type="text"
-                    className='border border-black mb-2'
-                    value={leftNumerator}
-                    onChange={handleLeftNumeratorChange}
-                    placeholder="Left numerator"
-                />
-                <div className='h-[1px] w-200 bg-black'></div>
-                <input
-                    type="text"
-                    className='border border-black mt-2'
-                    value={leftDenominator}
-                    onChange={handleLeftDenominatorChange}
-                    placeholder="Left denominator"
-                />
+        <div>
+            <div className='flex'>
+                <div>
+                    <input
+                        type="text"
+                        className='border border-black mb-2'
+                        value={leftNumerator}
+                        onChange={handleLeftNumeratorChange}
+                        placeholder="Left numerator"
+                    />
+                    <div className='h-[1px] w-200 bg-black'></div>
+                    <input
+                        type="text"
+                        className='border border-black mt-2'
+                        value={leftDenominator}
+                        onChange={handleLeftDenominatorChange}
+                        placeholder="Left denominator"
+                    />
+                </div>
+                <select value={operation} onChange={handleOperationChange}>
+                    <option value="+">+</option>
+                    <option value="-">-</option>
+                    <option value="*">*</option>
+                    <option value="/">/</option>
+                </select>
+                <div>
+                    <input
+                        className='border border-black mb-2'
+                        type="text"
+                        value={rightNumerator}
+                        onChange={handleRightNumeratorChange}
+                        placeholder="Right numerator"
+                    />
+                    <div className='h-[1px] w-200 bg-black'></div>
+                    <input
+                        className='border border-black mt-2'
+                        type="text"
+                        value={rightDenominator}
+                        onChange={handleRightDenominatorChange}
+                        placeholder="Right denominator"
+                    />
+                </div>
+                <button onClick={calculateResult}>Calculate</button>
+                <div>{result}</div>
             </div>
-            <select value={operation} onChange={handleOperationChange}>
-                <option value="+">+</option>
-                <option value="-">-</option>
-                <option value="*">*</option>
-                <option value="/">/</option>
-            </select>
-            <div>
-                <input
-                    className='border border-black mb-2'
-                    type="text"
-                    value={rightNumerator}
-                    onChange={handleRightNumeratorChange}
-                    placeholder="Right numerator"
-                />
-                <div className='h-[1px] w-200 bg-black'></div>
-                <input
-                    className='border border-black mt-2'
-                    type="text"
-                    value={rightDenominator}
-                    onChange={handleRightDenominatorChange}
-                    placeholder="Right denominator"
-                />
-            </div>
-            <button onClick={calculateResult}>Calculate</button>
-            <div>{result}</div>
             <div>
                 <p>Steps:</p>
                 <ul>

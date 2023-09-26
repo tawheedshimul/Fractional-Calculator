@@ -3,7 +3,7 @@ import FractionalCalculator from './FractionalCalculator';
 
 function App() {
   return (
-    <div>
+    <div className='mx-auto container mt-3'>
       <FractionalCalculator></FractionalCalculator>
     </div>
   )
