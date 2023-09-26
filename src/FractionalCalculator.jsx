@@ -7,6 +7,7 @@ function FractionalCalculator() {
     const [rightDenominator, setRightDenominator] = useState('');
     const [operation, setOperation] = useState('+');
     const [result, setResult] = useState('');
+    const [steps, setSteps] = useState([]);
 
     const handleLeftNumeratorChange = (e) => {
         setLeftNumerator(e.target.value);
@@ -59,37 +60,47 @@ function FractionalCalculator() {
     };
 
     return (
-        <div>
-            <input
-                type="text"
-                value={leftNumerator}
-                onChange={handleLeftNumeratorChange}
-                placeholder="Left numerator"
-            />
-            <input
-                type="text"
-                value={leftDenominator}
-                onChange={handleLeftDenominatorChange}
-                placeholder="Left denominator"
-            />
+        <div className='flex bg-red'>
+            <div>
+                <input
+                    type="text"
+                    className='border border-black mb-2'
+                    value={leftNumerator}
+                    onChange={handleLeftNumeratorChange}
+                    placeholder="Left numerator"
+                />
+                <div className='h-[1px] w-200 bg-black'></div>
+                <input
+                    type="text"
+                    className='border border-black mt-2'
+                    value={leftDenominator}
+                    onChange={handleLeftDenominatorChange}
+                    placeholder="Left denominator"
+                />
+            </div>
             <select value={operation} onChange={handleOperationChange}>
                 <option value="+">+</option>
                 <option value="-">-</option>
                 <option value="*">*</option>
                 <option value="/">/</option>
             </select>
-            <input
-                type="text"
-                value={rightNumerator}
-                onChange={handleRightNumeratorChange}
-                placeholder="Right numerator"
-            />
-            <input
-                type="text"
-                value={rightDenominator}
-                onChange={handleRightDenominatorChange}
-                placeholder="Right denominator"
-            />
+            <div>
+                <input
+                    className='border border-black mb-2'
+                    type="text"
+                    value={rightNumerator}
+                    onChange={handleRightNumeratorChange}
+                    placeholder="Right numerator"
+                />
+                <div className='h-[1px] w-200 bg-black'></div>
+                <input
+                    className='border border-black mt-2'
+                    type="text"
+                    value={rightDenominator}
+                    onChange={handleRightDenominatorChange}
+                    placeholder="Right denominator"
+                />
+            </div>
             <button onClick={calculateResult}>Calculate</button>
             <div>{result}</div>
         </div>
