@@ -29,6 +29,25 @@ function FractionalCalculator() {
         setOperation(e.target.value);
     };
 
+    const findLCD = (denominators) => {
+        let maxDenominator = Math.max(...denominators);
+        let commonDenominator = maxDenominator;
+
+        while (true) {
+            let isCommon = true;
+            for (let denominator of denominators) {
+                if (commonDenominator % denominator !== 0) {
+                    isCommon = false;
+                    break;
+                }
+            }
+            if (isCommon) break;
+            commonDenominator += maxDenominator;
+        }
+
+        return commonDenominator;
+    };
+
     const calculateResult = () => {
         const num1 = parseFloat(leftNumerator);
         const den1 = parseFloat(leftDenominator);
@@ -37,25 +56,44 @@ function FractionalCalculator() {
 
         if (isNaN(num1) || isNaN(den1) || isNaN(num2) || isNaN(den2)) {
             setResult('Please enter valid numbers');
+            setSteps([]);
         } else if (operation === '/' && num2 === 0) {
             setResult('Division by zero is not allowed');
+            setSteps([]);
         } else {
+            const denominators = [den1, den2];
+            const lcd = findLCD(denominators);
+
+            let stepsArray = [];
+
+            // Add steps to the array
+            stepsArray.push(`Find the least common denominator (LCD):${num1}/${den1},${num2},${den2} = ${lcd}`);
+            stepsArray.push(`Convert both fractions to have a denominator of ${lcd}`);
+            stepsArray.push(`Calculate the result:`);
+
             switch (operation) {
                 case '+':
-                    setResult((num1 * den2 + num2 * den1) + '/' + (den1 * den2));
+                    stepsArray.push(`${num1 * (lcd / den1) + num2 * (lcd / den2)} / ${lcd}`);
+                    setResult((num1 * (lcd / den1) + num2 * (lcd / den2)) + '/' + lcd);
                     break;
                 case '-':
-                    setResult((num1 * den2 - num2 * den1) + '/' + (den1 * den2));
+                    stepsArray.push(`${num1 * (lcd / den1) - num2 * (lcd / den2)} / ${lcd}`);
+                    setResult((num1 * (lcd / den1) - num2 * (lcd / den2)) + '/' + lcd);
                     break;
                 case '*':
+                    stepsArray.push(`${num1 * num2} / ${den1 * den2}`);
                     setResult((num1 * num2) + '/' + (den1 * den2));
                     break;
                 case '/':
+                    stepsArray.push(`${num1 * den2} / ${den1 * num2}`);
                     setResult((num1 * den2) + '/' + (den1 * num2));
                     break;
                 default:
                     setResult('Invalid operation');
+                    stepsArray = [];
             }
+
+            setSteps(stepsArray);
         }
     };
 
@@ -103,6 +141,14 @@ function FractionalCalculator() {
             </div>
             <button onClick={calculateResult}>Calculate</button>
             <div>{result}</div>
+            <div>
+                <p>Steps:</p>
+                <ul>
+                    {steps.map((step, index) => (
+                        <li key={index}>{step}</li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 }
