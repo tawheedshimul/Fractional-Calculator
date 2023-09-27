@@ -29,6 +29,8 @@ function FractionalCalculator() {
         setOperation(e.target.value);
     };
 
+
+
     const findLCD = (denominators) => {
         let maxDenominator = Math.max(...denominators);
         let commonDenominator = maxDenominator;
@@ -47,6 +49,39 @@ function FractionalCalculator() {
 
         return commonDenominator;
     };
+
+    ///Long division
+    function longDivision(dividend, divisor, decimalPlaces = 2) {
+        if (divisor === 0) {
+            throw new Error('Division by zero is not allowed.');
+        }
+
+        const isNegative = (dividend < 0) !== (divisor < 0);
+        dividend = Math.abs(dividend);
+        divisor = Math.abs(divisor);
+
+        const quotient = Math.floor(dividend / divisor);
+        let remainder = dividend % divisor;
+        let fraction = '';
+
+        if (remainder > 0) {
+            const gcd = greatestCommonDivisor(remainder, divisor);
+            const simplifiedRemainder = remainder / gcd;
+            const simplifiedDivisor = divisor / gcd;
+
+            fraction = ` ${simplifiedRemainder}/${simplifiedDivisor}`;
+        }
+
+        const result = isNegative ? `-${quotient}${fraction}` : `${quotient}${fraction}`;
+        return result;
+    }
+
+    function greatestCommonDivisor(a, b) {
+        if (b === 0) {
+            return a;
+        }
+        return greatestCommonDivisor(b, a % b);
+    }
 
 
 
@@ -75,18 +110,26 @@ function FractionalCalculator() {
                 case '+':
                     stepsArray.push(`${num1 * (lcd / den1) + num2 * (lcd / den2)} / ${lcd}`);
                     setResult((num1 * (lcd / den1) + num2 * (lcd / den2)) + '/' + lcd);
+                    var dividend = (num1 * (lcd / den1) + num2 * (lcd / den2));
+                    var divisor = (lcd);
+                    var longDiv = longDivision(dividend, divisor)
                     stepsArray.push(`LCD(${num1}/${den1},${num2}/${den2}) = ${lcd}`);
                     stepsArray.push(`\t(${num1} * ${lcd / den1} / ${den1} * ${lcd / den1}) ${operation} (${num2} * ${lcd / den2} / ${den2} * ${lcd / den2}) = ?`)
                     stepsArray.push(`\t${num1 * (lcd / den1)} / ${lcd} ${operation} ${num2 * (lcd / den2)} / ${lcd} = ?`);
                     stepsArray.push(`\t(${num1 * (lcd / den1)} ${operation} ${num2 * (lcd / den2)} )/ ${lcd} = ?`);
+                    stepsArray.push(`${longDiv}`);
                     break;
                 case '-':
                     stepsArray.push(`${num1 * (lcd / den1) - num2 * (lcd / den2)} / ${lcd}`);
                     setResult((num1 * (lcd / den1) - num2 * (lcd / den2)) + '/' + lcd);
+                    var dividend = (num1 * (lcd / den1) - num2 * (lcd / den2));
+                    var divisor = (lcd);
+                    var longDiv = longDivision(dividend, divisor)
                     stepsArray.push(`LCD(${num1}/${den1},${num2}/${den2}) = ${lcd}`);
                     stepsArray.push(`\t(${num1} * ${lcd / den1} / ${den1} * ${lcd / den1}) ${operation} (${num2} * ${lcd / den2} / ${den2} * ${lcd / den2}) = ?`)
                     stepsArray.push(`\t${num1 * (lcd / den1)} / ${lcd} ${operation} ${num2 * (lcd / den2)} / ${lcd} = ?`);
                     stepsArray.push(`\t(${num1 * (lcd / den1)} ${operation} ${num2 * (lcd / den2)} )/ ${lcd} = ?`);
+                    stepsArray.push(`${longDiv}`);
                     break;
                 case '*':
                     stepsArray.push(`${num1 * num2} / ${den1 * den2}`);
