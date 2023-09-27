@@ -48,6 +48,8 @@ function FractionalCalculator() {
         return commonDenominator;
     };
 
+
+
     const calculateResult = () => {
         const num1 = parseFloat(leftNumerator);
         const den1 = parseFloat(leftDenominator);
@@ -66,36 +68,37 @@ function FractionalCalculator() {
 
             let stepsArray = [];
 
-
-            // Solution with steps
             stepsArray.push(`(${num1}/${den1})${operation}(${num2}/${den2}) = ?`);
-            // Add steps to the array
-            stepsArray.push(`Find the least common denominator (LCD):${num1}/${den1},${num2}/${den2} = ${lcd}`);
-
-            stepsArray.push(`\t(${num1} * ${lcd / den1} / ${den1} * ${lcd / den1}) ${operation} (${num2} * ${lcd / den2} / ${den2} * ${lcd / den2}) = ?`)
-            stepsArray.push(`\t${num1 * (lcd / den1)} / ${lcd} ${operation} ${num2 * (lcd / den2)} / ${lcd} = ?`);
-            stepsArray.push(`\t(${num1 * (lcd / den1)} ${operation} ${num2 * (lcd / den2)} )/ ${lcd} = ?`);
-           
-
-
             stepsArray.push(`Calculate the result:`);
 
             switch (operation) {
                 case '+':
                     stepsArray.push(`${num1 * (lcd / den1) + num2 * (lcd / den2)} / ${lcd}`);
                     setResult((num1 * (lcd / den1) + num2 * (lcd / den2)) + '/' + lcd);
+                    stepsArray.push(`LCD(${num1}/${den1},${num2}/${den2}) = ${lcd}`);
+                    stepsArray.push(`\t(${num1} * ${lcd / den1} / ${den1} * ${lcd / den1}) ${operation} (${num2} * ${lcd / den2} / ${den2} * ${lcd / den2}) = ?`)
+                    stepsArray.push(`\t${num1 * (lcd / den1)} / ${lcd} ${operation} ${num2 * (lcd / den2)} / ${lcd} = ?`);
+                    stepsArray.push(`\t(${num1 * (lcd / den1)} ${operation} ${num2 * (lcd / den2)} )/ ${lcd} = ?`);
                     break;
                 case '-':
                     stepsArray.push(`${num1 * (lcd / den1) - num2 * (lcd / den2)} / ${lcd}`);
                     setResult((num1 * (lcd / den1) - num2 * (lcd / den2)) + '/' + lcd);
+                    stepsArray.push(`LCD(${num1}/${den1},${num2}/${den2}) = ${lcd}`);
+                    stepsArray.push(`\t(${num1} * ${lcd / den1} / ${den1} * ${lcd / den1}) ${operation} (${num2} * ${lcd / den2} / ${den2} * ${lcd / den2}) = ?`)
+                    stepsArray.push(`\t${num1 * (lcd / den1)} / ${lcd} ${operation} ${num2 * (lcd / den2)} / ${lcd} = ?`);
+                    stepsArray.push(`\t(${num1 * (lcd / den1)} ${operation} ${num2 * (lcd / den2)} )/ ${lcd} = ?`);
                     break;
                 case '*':
                     stepsArray.push(`${num1 * num2} / ${den1 * den2}`);
                     setResult((num1 * num2) + '/' + (den1 * den2));
+                    stepsArray.push(`\t${num1}/${den1} * ${num2}/${den2} = ?`);
+                    stepsArray.push(`\t${num1}*${num2} / ${den1}/${den2} = ${num1 * num2} / ${den1 * den2}`);
                     break;
                 case '/':
                     stepsArray.push(`${num1 * den2} / ${den1 * num2}`);
                     setResult((num1 * den2) + '/' + (den1 * num2));
+                    stepsArray.push(`\t${num1}/${den1} * ${den2}/${num2} = ?`);
+                    stepsArray.push(`\t${num1}*${den2} / ${den1}*${num2} = ${num1 * den2} / ${den1 * num2}`);
                     break;
                 default:
                     setResult('Invalid operation');
