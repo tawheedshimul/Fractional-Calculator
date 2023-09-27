@@ -84,6 +84,29 @@ function FractionalCalculator() {
     }
 
 
+    // simplify gcd 
+    function simplifyFraction(numerator, denominator) {
+        // Function to find the greatest common divisor (GCD) using Euclidean algorithm
+        function findGCD(a, b) {
+            if (b === 0) {
+                return a;
+            }
+            return findGCD(b, a % b);
+        }
+
+        // Find the GCD of the numerator and denominator
+        const gcd = findGCD(numerator, denominator);
+
+        // Simplify the fraction by dividing both numerator and denominator by the GCD
+        const simplifiedNumerator = numerator / gcd;
+        const simplifiedDenominator = denominator / gcd;
+
+        return {
+            simplifiedFraction: `${simplifiedNumerator}/${simplifiedDenominator}`,
+            commonDivisor: gcd
+        };
+    }
+
 
     const calculateResult = () => {
         const num1 = parseFloat(leftNumerator);
@@ -110,9 +133,14 @@ function FractionalCalculator() {
                 case '+':
                     stepsArray.push(`${num1 * (lcd / den1) + num2 * (lcd / den2)} / ${lcd}`);
                     setResult((num1 * (lcd / den1) + num2 * (lcd / den2)) + '/' + lcd);
+                    // long division 
                     var dividend = (num1 * (lcd / den1) + num2 * (lcd / den2));
                     var divisor = (lcd);
                     var longDiv = longDivision(dividend, divisor)
+                    // long divison end 
+                    // gcd simplifyFraction start
+                    // simplifyFraction code bosano lagbe 
+                    // gcd simplifyFraction end 
                     stepsArray.push(`LCD(${num1}/${den1},${num2}/${den2}) = ${lcd}`);
                     stepsArray.push(`\t(${num1} * ${lcd / den1} / ${den1} * ${lcd / den1}) ${operation} (${num2} * ${lcd / den2} / ${den2} * ${lcd / den2}) = ?`)
                     stepsArray.push(`\t${num1 * (lcd / den1)} / ${lcd} ${operation} ${num2 * (lcd / den2)} / ${lcd} = ?`);
